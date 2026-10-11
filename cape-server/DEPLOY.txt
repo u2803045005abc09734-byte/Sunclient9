@@ -1,0 +1,19 @@
+Sun Client Cape Server (optional friend-group sync)
+
+This small Node.js server is optional. Local capes work without it. To let other Sun Client players see one another's capes, host this server at an HTTPS URL reachable by all friends.
+
+Requirements: Node.js 20+, HTTPS reverse proxy or a hosting platform that provides HTTPS, persistent storage.
+
+Environment variables:
+  PORT=8787
+  SUN_CAPE_KEY=<one private random key, at least 16 characters>
+  DATA_DIR=./data/capes
+
+Run locally:
+  cd cape-server
+  # Set SUN_CAPE_KEY in your shell (do not commit it!)
+  npm start
+
+If hosting publicly, configure a persistent data folder and HTTPS. In Minecraft, open Right Shift -> Custom Capes, enter the server's HTTPS base URL and the same private group key, save settings, enable Friends Sync, and click Upload Cape. Each friend using Sun Client must enter the same URL/key. Do not post the key publicly: anyone who knows it can upload, replace, or remove a cape associated with a UUID.
+
+Cape images must be PNG, exactly 64x32 pixels, and at most 128 KiB. The Minecraft account UUID is used as the cape identity. The service does not receive Microsoft/Mojang passwords or access tokens.

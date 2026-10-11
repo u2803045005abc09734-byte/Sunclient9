@@ -1,0 +1,62 @@
+plugins {
+    id 'net.fabricmc.fabric-loom-remap' version "${loom_version}"
+    id 'maven-publish'
+}
+
+group = 'de.sunclient'
+version = project.mod_version
+base {
+    archivesName = 'sunclient'
+}
+
+repositories {
+    mavenCentral()
+    maven { url = 'https://maven.fabricmc.net/' }
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    // Die mitgelieferten Quellen verwenden Fabric-Intermediary-Namen (class_..., method_..., field_...).
+    mappings "net.fabricmc:intermediary:${project.minecraft_version}:v2"
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+}
+
+processResources {
+    inputs.property 'version', project.version
+    filesMatching('fabric.mod.json') {
+        expand 'version': project.version
+    }
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+    withSourcesJar()
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.release = 21
+}
+
+// Erstellt zusätzlich eine installierbare ZIP, die die remappte Mod-JAR enthält.
+tasks.register('modZip', Zip) {
+    group = 'build'
+    description = 'Packt die fertige Sun-Client-Mod-JAR in eine ZIP.'
+    dependsOn tasks.named('remapJar')
+    archiveFileName = "sunclient-${project.version}-mod.zip"
+    destinationDirectory = layout.buildDirectory.dir('distributions')
+    from(tasks.named('remapJar')) {
+        into 'mods'
+    }
+}
+
+publishing {
+    publications {
+        create('mavenJava', MavenPublication) {
+            from components.java
+        }
+    }
+}

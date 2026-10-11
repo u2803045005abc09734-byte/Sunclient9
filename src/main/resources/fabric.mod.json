@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "sunclient",
+  "version": "${version}",
+  "name": "Sun Client",
+  "description": "Sun Client für Minecraft 1.21.11 mit HUD, Modrinth-Packs, eigenem Menü und lokalen sowie synchronisierten Custom Capes.",
+  "authors": ["Sun Client Community"],
+  "environment": "client",
+  "entrypoints": {
+    "client": ["de.sunclient.SunClient"]
+  },
+  "mixins": ["sunclient.mixins.json"],
+  "depends": {
+    "fabricloader": ">=0.16.0",
+    "minecraft": "~1.21.11",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
+}
